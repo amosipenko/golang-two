@@ -7,6 +7,7 @@ import (
 type user struct {
 	name string
 	age  int
+	resident bool
 }
 
 func (u *user) getName() string {
@@ -30,7 +31,7 @@ func createUser() (name string, err error) {
 		}
 	}()
 
-	user := &user{"Sam", 30}
+	user := &user{"Sam", 30, true}
 	user = nil
 	return user.getName(), nil
 }
