@@ -1,12 +1,12 @@
-package panics
+package panics // import "amosipenko/panics"
 
 import (
 	"fmt"
 )
 
 type user struct {
-	name string
-	age  int
+	name     string
+	age      int
 	resident bool
 }
 
