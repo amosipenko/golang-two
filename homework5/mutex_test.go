@@ -43,10 +43,7 @@ func (n *Numbers) ReadUsingRWMutex(i float64) bool {
 	return ok
 }
 
-var (
-	numberOfWrites = []int{10, 50, 90}
-	steps          = 100
-)
+var steps = 100
 
 func BenchmarkMutex_10(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
