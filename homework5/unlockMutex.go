@@ -29,10 +29,8 @@ func main() {
 	for i := 0; i < n; i++ {
 		go func() {
 			mx.Lock()
-			defer func() {
-				mx.Unlock()
-				wg.Done()
-			}()
+			defer mx.Unlock()
+			defer wg.Done()
 
 			file.Seek(0, 0)
 			data, err := ioutil.ReadAll(file)
@@ -47,15 +45,34 @@ func main() {
 				return
 			}
 
-			os.WriteFile(file.Name(), []byte(strconv.Itoa(lastCounter+1)), 0644)
+			err = os.WriteFile(file.Name(), []byte(strconv.Itoa(lastCounter+1)), 0644)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}()
 	}
 	wg.Wait()
 
 	file.Seek(0, 0)
 	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		err = fmt.Errorf("Couldn`t get gorutines result", err)
+		fmt.Println(err)
+		return
+	}
+
 	fmt.Printf("Обработано горутин: %s", string(content))
 
-	file.Close()
-	os.Remove(file.Name())
+	err = file.Close()
+	if err != nil {
+		err = fmt.Errorf("Couldn`t close the file", err)
+		fmt.Println(err)
+		return
+	}
+
+	err = os.Remove(file.Name())
+	if err != nil {
+		err = fmt.Errorf("Couldn`t remove the file", err)
+		fmt.Println(err)
+	}
 }
